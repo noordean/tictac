@@ -4,6 +4,30 @@ defmodule Tictac do
   end
 
   def new_board do
-    for s <- squares(), into: %{}, do: {s, :empty}
+    for {:ok, s} <- squares(), into: %{}, do: {s, :empty}
+  end
+
+  def play_at(board, row, col, player) do
+    with {:ok, current_player} <- new_player(player),
+      {:ok, square_position} <- Square.new(row, col),
+      {:ok, current_board} <- play(board, square_position, current_player),
+    do: current_board
+  end
+
+  defp new_player(player) do
+    case player do
+      :o -> {:ok, player}
+      :x -> {:ok, player}
+      _ -> {:error, :invalid_player}
+    end
+  end
+
+  defp play(board, square_position, player) do
+    case board[square_position] do
+      :empty -> {:ok, %{ board | square_position => player }}
+      :x -> {:error, :occupied}
+      :o -> {:error, :occupied}
+      _ -> {:error, :invalid_position}
+    end
   end
 end
