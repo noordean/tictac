@@ -1,18 +1,9 @@
 defmodule Tictac do
-  @moduledoc """
-  Documentation for Tictac.
-  """
+  def squares do
+    for row <- 1..3, col <- 1..3, into: %MapSet{}, do: Square.new(row, col)
+  end
 
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> Tictac.hello()
-      :world
-
-  """
-  def hello do
-    :world
+  def new_board do
+    for s <- squares(), into: %{}, do: {s, :empty}
   end
 end
