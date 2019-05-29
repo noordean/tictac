@@ -8,13 +8,13 @@ defmodule Tictac do
   end
 
   def play_at(board, row, col, player) do
-    with {:ok, current_player} <- new_player(player),
+    with {:ok, current_player} <- check_player(player),
       {:ok, square_position} <- Square.new(row, col),
       {:ok, current_board} <- play(board, square_position, current_player),
     do: current_board
   end
 
-  defp new_player(player) do
+  def check_player(player) do
     case player do
       :o -> {:ok, player}
       :x -> {:ok, player}
@@ -22,7 +22,7 @@ defmodule Tictac do
     end
   end
 
-  defp play(board, square_position, player) do
+  def play(board, square_position, player) do
     case board[square_position] do
       :empty -> {:ok, %{ board | square_position => player }}
       :x -> {:error, :occupied}
