@@ -4,9 +4,6 @@ A simple TicTacToe CLI application
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `tictac` to your list of dependencies in `mix.exs`:
-
 ```
 git clone https://github.com/noordean/tictac.git
 cd tictac
