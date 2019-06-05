@@ -1,9 +1,20 @@
 defmodule Tictac.State do
   alias __MODULE__
-  defstruct [status: :initial, board: Tictac.new_board, current_player: nil, next_player: nil, winner: nil]
+  defstruct [
+    status: :initial,
+    board: Tictac.new_board,
+    current_player: nil,
+    next_player: nil,
+    winner: nil,
+    ui: nil
+  ]
 
   def new do
     {:ok, %State{}}
+  end
+
+  def new(ui) do
+    {:ok, %State{ui: ui}}
   end
 
   def event(%State{status: :initial} = state, {:start_game, player}) do
@@ -35,7 +46,7 @@ defmodule Tictac.State do
     end
   end
 
-  def event(state, action) do
+  def event(_state, _action) do
     {:error, :invalid_state_transition}
   end
 
