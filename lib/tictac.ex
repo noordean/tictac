@@ -52,14 +52,7 @@ defmodule Tictac do
     state = %{state | board: current_board}
 
     {:ok, state} = if game_over?(state.board) do
-      case winner(state.board) do
-        "" ->
-          IO.puts "Game Over... That was a draw!"
-          State.event(state, {:finish_game, :tie})
-        player ->
-          IO.puts "Game Over... #{player} won!"
-          State.event(state, {:finish_game, String.to_atom(player)})
-      end
+      State.event(state, {:finish_game, winner_or_tie(state.board)})
     else
       State.event(state, {:play, selected_player})
     end
@@ -67,8 +60,22 @@ defmodule Tictac do
     handle_play(state)
   end
 
+  def handle_play(%{status: :over} = state) do
+    case state.winner do
+      :tie -> IO.puts "Game Over... That was a draw!"
+      player -> IO.puts "Game Over... #{player} won!"
+    end
+  end
+
+  def winner_or_tie(board) do
+    case winner(board) do
+      "" -> :tie
+      player -> String.to_atom(player)
+    end
+  end
+
   def game_over?(board) do
-    empties = for {pos, value} <- board, value == :empty, do: value
+    empties = for {_pos, value} <- board, value == :empty, do: value
     length(empties) == 0
   end
 
